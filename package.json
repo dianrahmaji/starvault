@@ -1,0 +1,8 @@
+{
+  "name": "star-vault",
+  "version": "0.0.0",
+  "description": "A live recording system for capturing and archiving livestreams effortlessly ✨",
+  "author": "Dian Rahmaji <dianrahmaji@gmail.com>",
+  "license": "UNLICENSED",
+  "packageManager": "pnpm@10.5.2"
+}
