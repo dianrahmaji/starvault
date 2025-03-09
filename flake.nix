@@ -1,5 +1,5 @@
 {
-	description = "knowledge management project's flake";
+	description = "Star vault project's flake";
 
 	inputs = {
 		nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
