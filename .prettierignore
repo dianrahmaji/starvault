@@ -1,0 +1,8 @@
+.husky
+.turbo
+node_modules
+.prettierignore
+pnpm-lock.yaml
+.git
+.dockerignore
+.gitignore
