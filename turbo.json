@@ -1,5 +1,6 @@
 {
 	"$schema": "https://turbo.build/schema.json",
+	"globalEnv": ["DB_NAME", "DB_PASSWORD", "DB_PORT", "DB_USER", "ENV", "PORT"],
 	"tasks": {
 		"dev": {
 			"persistent": true,
@@ -7,6 +8,9 @@
 		},
 		"build": {
 			"dependsOn": ["^build"]
+		},
+		"lint": {
+			"dependsOn": ["^lint"]
 		}
 	}
 }
