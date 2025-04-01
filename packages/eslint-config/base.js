@@ -20,7 +20,8 @@ export const config = tseslint.config(
 			'lib',
 			'node_modules',
 			'pnpm-lock.yaml',
-			'dist',
+			'dist/**/*.ts',
+			'dist/**',
 		],
 	},
 	{ linterOptions: { reportUnusedDisableDirectives: 'error' } },
@@ -45,9 +46,8 @@ export const config = tseslint.config(
 		languageOptions: {
 			parserOptions: {
 				projectService: {
-					allowDefaultProject: ['*.config.*s', 'bin/index.js'],
+					allowDefaultProject: ['*.config.*s', 'bin/index.js', '*.e2e-spec.ts'],
 				},
-				tsconfigRootDir: import.meta.dirname,
 			},
 		},
 		rules: {
@@ -63,6 +63,14 @@ export const config = tseslint.config(
 				'error',
 				'always',
 				{ enforceForIfStatements: true },
+			],
+			'@typescript-eslint/no-extraneous-class': [
+				'error',
+				{
+					allowEmpty: true,
+					allowStaticOnly: true,
+					allowWithDecorator: true,
+				},
 			],
 			'no-useless-rename': 'error',
 			'object-shorthand': 'error',

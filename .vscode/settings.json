@@ -1,8 +1,25 @@
 {
-  "editor.tabSize": 2,
-  "editor.insertSpaces": false,
-  "editor.renderWhitespace": "all",
-  "editor.formatOnSave": true,
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "material-icon-theme.activeIconPack": "nest"
+	"editor.tabSize": 2,
+	"editor.insertSpaces": false,
+	"editor.renderWhitespace": "all",
+	"editor.formatOnSave": true,
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"material-icon-theme.activeIconPack": "nest",
+	"eslint.validate": [
+		"javascript",
+		"javascriptreact",
+		"typescript",
+		"typescriptreact"
+	],
+	"eslint.workingDirectories": [{ "mode": "auto" }],
+	"debug.javascript.unmapMissingSources": true,
+	"files.associations": {
+		"libturbo.h": "c",
+		"turbo.json": "jsonc",
+		"*.t.err": "cram"
+	},
+	"editor.codeActionsOnSave": {
+		"source.fixAll": "explicit"
+	},
+	"eslint.format.enable": true
 }

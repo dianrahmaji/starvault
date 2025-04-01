@@ -1,5 +1,6 @@
 {
 	"name": "@star-vault/eslint-config",
+	"type": "module",
 	"packageManager": "pnpm@10.5.2",
 	"exports": {
 		"./base": "./base.js"

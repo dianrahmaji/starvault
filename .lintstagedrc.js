@@ -9,9 +9,7 @@ module.exports = {
 
 		return [
 			`prettier --write ${stagedFiles.join(' ')}`,
-			...projectNames.map(
-				(project) => `turbo run lint --filter=${project} -- --fix`,
-			),
+			...projectNames.map(() => `turbo run lint -- --fix`),
 		];
 	},
 };
