@@ -10,7 +10,7 @@ dotenv.config();
 
 const config: Options = {
 	dbName: process.env.DB_NAME,
-	debug: process.env.ENV.endsWith('local'),
+	debug: process.env.ENV!.endsWith('local'),
 	entities: [
 		//
 		Dummy,
@@ -21,7 +21,7 @@ const config: Options = {
 		snapshot: false,
 	},
 	password: process.env.DB_PASSWORD,
-	port: parseInt(process.env.DB_PORT),
+	port: parseInt(process.env.DB_PORT!),
 	user: process.env.DB_USER,
 };
 
