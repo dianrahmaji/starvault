@@ -82,6 +82,12 @@ export const config = tseslint.config(
 		},
 	},
 	{
+		files: ['**/*.ts', '**/*.js'],
+		rules: {
+			'@typescript-eslint/no-non-null-assertion': 'off',
+		},
+	},
+	{
 		extends: [tseslint.configs.disableTypeChecked],
 		files: ['**/*.md/*.ts'],
 		rules: { 'n/no-missing-import': 'off' },
