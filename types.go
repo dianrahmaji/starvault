@@ -11,6 +11,15 @@ type User struct {
 	UpdatedAt   time.Time
 }
 
+type OAuthToken struct {
+	ID           uint `gorm:"primaryKey"`
+	AccessToken  string
+	RefreshToken string
+	Expiry       time.Time
+	CreatedAt    time.Time
+	UpdatedAt    time.Time
+}
+
 type LiveStreamStatus string
 
 const (

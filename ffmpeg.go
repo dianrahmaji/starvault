@@ -51,6 +51,7 @@ func startRecording(db *gorm.DB, liveStream LiveStream) {
 		"-reconnect_streamed", "1",
 		"-reconnect_delay_max", "2",
 		"-i", liveStream.PlaybackUrl,
+		// "-t", "5",
 		"-c", "copy",
 		"-f", "mpegts",
 		"-y", outputPath,

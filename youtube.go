@@ -11,32 +11,43 @@ import (
 
 	"github.com/hibiken/asynq"
 	"golang.org/x/oauth2"
-	"golang.org/x/oauth2/google"
-
 	"google.golang.org/api/option"
 	"google.golang.org/api/youtube/v3"
+	"gorm.io/gorm"
 )
 
+func getClient(ctx context.Context, db *gorm.DB) (*http.Client, error) {
+	var oauthToken OAuthToken
 
-func getClient(ctx context.Context) *http.Client {
-	clientID := os.Getenv("YOUTUBE_CLIENT_ID")
-	clientSecret := os.Getenv("YOUTUBE_CLIENT_SECRET")
-	refreshToken := os.Getenv("YOUTUBE_REFRESH_TOKEN")
-	accessToken := os.Getenv("YOUTUBE_ACCESS_TOKEN")
-
-	conf := &oauth2.Config{
-		ClientID:     clientID,
-		ClientSecret: clientSecret,
-		Endpoint:     google.Endpoint,
-		Scopes:       []string{youtube.YoutubeUploadScope},
+	if err := db.First(&oauthToken).Error; err != nil {
+		return nil, err
 	}
 
 	token := &oauth2.Token{
-		AccessToken:  accessToken,
-		RefreshToken: refreshToken,
+		AccessToken:  oauthToken.AccessToken,
+		RefreshToken: oauthToken.RefreshToken,
+		Expiry:       oauthToken.Expiry,
 	}
 
-	return conf.Client(ctx, token)
+	ts := conf.TokenSource(ctx, token)
+
+	newToken, err := ts.Token()
+
+	if err != nil {
+		return nil, err
+	}
+
+	if newToken.AccessToken != oauthToken.AccessToken || !newToken.Expiry.Equal(oauthToken.Expiry) {
+		oauthToken.AccessToken = newToken.AccessToken
+		oauthToken.RefreshToken = newToken.RefreshToken
+		oauthToken.Expiry = newToken.Expiry
+
+		if err := db.Save(&oauthToken).Error; err != nil {
+			return nil, err
+		}
+	}
+
+	return conf.Client(ctx, newToken), nil
 }
 
 type ProgressReader struct {
@@ -65,8 +76,12 @@ func removeFiles(path string) {
 	}
 }
 
-func createYouTubeService(ctx context.Context) (*youtube.Service, error) {
-	client := getClient(ctx)
+func createYouTubeService(ctx context.Context, db *gorm.DB) (*youtube.Service, error) {
+	client, err := getClient(ctx, db)
+
+	if err != nil {
+		return nil, err
+	}
 
 	service, err := youtube.NewService(ctx, option.WithHTTPClient(client))
 
@@ -185,13 +200,17 @@ func addVideoToPlaylist(service *youtube.Service, videoId string, playlistId str
 	return err
 }
 
-func handleUploadToYouTube(ctx context.Context, t *asynq.Task) error {
+func handleUploadToYouTube(ctx context.Context, t *asynq.Task, db *gorm.DB) error {
 	var liveStream LiveStream
 	if err := json.Unmarshal(t.Payload(), &liveStream); err != nil {
 		return err
 	}
 
-	service, err := createYouTubeService(ctx)
+	service, err := createYouTubeService(ctx, db)
+
+	if err != nil {
+		return fmt.Errorf("error creating YouTube service: %w", err)
+	}
 
 	videoId, err := uploadVideo(service, liveStream)
 

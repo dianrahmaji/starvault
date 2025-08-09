@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -9,6 +10,7 @@ import (
 
 	"github.com/hibiken/asynq"
 	"github.com/hibiken/asynqmon"
+	"gorm.io/gorm"
 )
 
 func enqueueUploadJob(liveStream LiveStream) error {
@@ -38,7 +40,7 @@ func enqueueUploadJob(liveStream LiveStream) error {
 	return nil
 }
 
-func startAsynqWorker() {
+func startAsynqWorker(db *gorm.DB) {
 	redisOpt := asynq.RedisClientOpt{Addr: "localhost:6379"}
 	srv := asynq.NewServer(redisOpt, asynq.Config{
 		Concurrency: 5,
@@ -48,20 +50,20 @@ func startAsynqWorker() {
 	})
 
 	mux := asynq.NewServeMux()
-	mux.HandleFunc("video:upload", handleUploadToYouTube)
+	mux.HandleFunc("video:upload", func(ctx context.Context, t *asynq.Task) error {
+		return handleUploadToYouTube(ctx, t, db)
+	})
 
 	if err := srv.Run(mux); err != nil {
 		log.Fatal("Asynq worker error:", err)
 	}
 }
 
-func startAsynqMonitoring() {
+func asynqMonitoringHandler() http.Handler {
 	mon := asynqmon.New(asynqmon.Options{
 		RootPath:     "/monitor",
 		RedisConnOpt: asynq.RedisClientOpt{Addr: "localhost:6379"},
 	})
 
-	http.Handle("/monitor/", mon)
-	log.Println("Server started at :8080")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	return mon
 }

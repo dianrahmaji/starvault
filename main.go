@@ -24,8 +24,8 @@ func main() {
 
 	c := startCronJob(db)
 
-	go startAsynqWorker()
-	go startAsynqMonitoring()
+	go startAsynqWorker(db)
+	go startHttpServer(db)
 
 	sigs := make(chan os.Signal, 1)
 	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)

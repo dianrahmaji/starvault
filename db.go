@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"time"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -58,6 +59,21 @@ func resetIsRecordingStatus(db *gorm.DB) {
 	}
 }
 
+func updateOauthToken(db *gorm.DB, accessToken string, refreshToken string, expiry time.Time) {
+	var token OAuthToken
+
+	err := db.FirstOrCreate(&token, OAuthToken{}).Updates(
+		OAuthToken{
+			AccessToken:  accessToken,
+			RefreshToken: refreshToken,
+			Expiry:       expiry,
+		}).Error
+
+	if err != nil {
+		log.Println("Failed to save OAuth Token")
+	}
+}
+
 func initDB() (*gorm.DB, error) {
 
 	dsn := fmt.Sprintf(
@@ -76,7 +92,7 @@ func initDB() (*gorm.DB, error) {
 		return nil, err
 	}
 
-	if err := db.AutoMigrate(&User{}); err != nil {
+	if err := db.AutoMigrate(&User{}, &OAuthToken{}); err != nil {
 		log.Fatal("failed to migrate schema:", err)
 	}
 
@@ -88,6 +104,7 @@ func initDB() (*gorm.DB, error) {
 		// {ID: "396ea983-9aad-4460-8641-e67f2c871030"},
 		// {ID: "396ea983-9aad-4460-8641-e67f2c871030"},
 		// {ID: "cbc0bbe1-d6ea-4646-bfcf-24b3a642fa21"},
+		// {ID: "396ea983-9aad-4460-8641-e67f2c871030"},
 	}
 
 	for _, u := range users {
