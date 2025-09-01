@@ -4,10 +4,11 @@ import "time"
 
 type Streamer struct {
 	StreamerID           int
-	StreamerExternalUUID string
+	StreamerPlatformUUID string
 	Name                 *string
 	IsLive               bool
 	IsRecording          bool
+	shouldRecord         bool
 	CreatedAt            time.Time
 	UpdatedAt            time.Time
 }
