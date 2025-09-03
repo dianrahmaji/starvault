@@ -13,12 +13,13 @@
       in {
         devShells.default = pkgs.mkShell {
           buildInputs = with pkgs; [
-			ffmpeg
-		    go
+						ffmpeg
+						go
+						goose
           ];
-		  shellHook = ''
-		  	zsh
-		  '';
+          shellHook = ''
+            zsh
+          '';
         };
       }
     );
