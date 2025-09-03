@@ -6,6 +6,7 @@ require (
 	github.com/hibiken/asynq v0.25.1
 	github.com/hibiken/asynqmon v0.7.2
 	github.com/joho/godotenv v1.5.1
+	github.com/lib/pq v1.10.9
 	github.com/robfig/cron/v3 v3.0.1
 	golang.org/x/oauth2 v0.30.0
 	google.golang.org/api v0.244.0
@@ -33,7 +34,6 @@ require (
 	github.com/jackc/puddle/v2 v2.2.2 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
-	github.com/joho/godotenv v1.5.1 // indirect
 	github.com/redis/go-redis/v9 v9.7.0 // indirect
 	github.com/spf13/cast v1.7.0 // indirect
 	go.opentelemetry.io/auto/sdk v1.1.0 // indirect

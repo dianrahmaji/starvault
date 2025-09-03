@@ -12,9 +12,13 @@ func main() {
 	cfg, err := config.Load()
 
 	if err != nil {
-		fmt.Println("%s", err)
+		fmt.Printf("%s\n", err)
 		os.Exit(1)
 	}
 
-	scheduler.Start(cfg.IDNApiUrl)
+	err = scheduler.Start(cfg)
+	if err != nil {
+		fmt.Printf("%s\n", err)
+		os.Exit(1)
+	}
 }
