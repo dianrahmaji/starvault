@@ -5,6 +5,7 @@ go 1.24.4
 require (
 	github.com/hibiken/asynq v0.25.1
 	github.com/hibiken/asynqmon v0.7.2
+	github.com/joho/godotenv v1.5.1
 	github.com/robfig/cron/v3 v3.0.1
 	golang.org/x/oauth2 v0.30.0
 	google.golang.org/api v0.244.0
