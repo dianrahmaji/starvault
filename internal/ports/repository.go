@@ -3,7 +3,7 @@ package ports
 import "github.com/dianrahmaji/star-vault/internal/entity"
 
 type StreamerRepository interface {
-	Upsert(streamer *entity.Streamer) error
+	UpsertMany(streamers []*entity.Streamer) error
 }
 
 type LivestreamRepository interface {
