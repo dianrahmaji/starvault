@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/dianrahmaji/star-vault/internal/ports"
+	"github.com/dianrahmaji/star-vault/internal/port"
 )
 
 const query = `
@@ -37,7 +37,7 @@ type GraphQLRequest struct {
 }
 
 type GraphQLGetLiveStreamsData struct {
-	Livestreams []ports.LivestreamDTO `json:"getLivestreams"`
+	Livestreams []port.LivestreamDTO `json:"getLivestreams"`
 }
 
 type GraphQLGetLiveStreamsResponse struct {
@@ -48,9 +48,9 @@ func NewIDNGateway(apiURL string) *IDNGateway {
 	return &IDNGateway{apiURL: apiURL}
 }
 
-func (g *IDNGateway) FetchLivestreams() ([]ports.LivestreamDTO, error) {
+func (g *IDNGateway) FetchLivestreams() ([]port.LivestreamDTO, error) {
 	page := 1
-	livestreams := []ports.LivestreamDTO{}
+	livestreams := []port.LivestreamDTO{}
 
 	for {
 		variables := GraphQLQueryVariables{Page: page}

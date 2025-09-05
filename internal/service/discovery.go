@@ -4,15 +4,15 @@ import (
 	"slices"
 
 	"github.com/dianrahmaji/star-vault/internal/entity"
-	"github.com/dianrahmaji/star-vault/internal/ports"
+	"github.com/dianrahmaji/star-vault/internal/port"
 )
 
 type DiscoveryService struct {
-	IDNGateway   ports.IDNGateway
-	StreamerRepo ports.StreamerRepository
+	IDNGateway   port.IDNGateway
+	StreamerRepo port.StreamerRepository
 }
 
-func NewDiscoveryService(IDNGateway ports.IDNGateway, streamerRepo ports.StreamerRepository) *DiscoveryService {
+func NewDiscoveryService(IDNGateway port.IDNGateway, streamerRepo port.StreamerRepository) *DiscoveryService {
 	return &DiscoveryService{IDNGateway: IDNGateway, StreamerRepo: streamerRepo}
 }
 

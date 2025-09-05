@@ -1,4 +1,4 @@
-package ports
+package port
 
 import "github.com/dianrahmaji/star-vault/internal/entity"
 
