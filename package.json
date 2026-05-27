@@ -1,7 +1,12 @@
 {
   "private": true,
-  "scripts": {},
+  "scripts": {
+    "lint": "biome lint .",
+    "lint:fix": "biome lint --write .",
+    "format": "biome format --write ."
+  },
   "devDependencies": {
+    "@biomejs/biome": "2.4.16",
     "turbo": "^2.9.15"
   },
   "packageManager": "pnpm@9.0.0"
