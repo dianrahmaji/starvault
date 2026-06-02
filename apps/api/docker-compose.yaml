@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  db:
+    image: 'postgres:18.4-alpine'
+    restart: unless-stopped
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: username
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: starvault
+    volumes:
+      - postgresql:/var/lib/postgresql
+
+volumes:
+  postgresql:
