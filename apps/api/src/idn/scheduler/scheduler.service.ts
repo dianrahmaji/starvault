@@ -6,6 +6,7 @@ import { firstValueFrom } from 'rxjs';
 type Creator = {
   name: string;
   uuid: string;
+  username: string;
 };
 
 type LiveStream = {
@@ -31,8 +32,9 @@ const GET_LIVESTREAMS_QUERY = `
       playback_url
       status
       creator {
-        name
         uuid
+        name
+        username
       }
     }
   }
