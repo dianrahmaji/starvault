@@ -15,7 +15,7 @@ import { IdnModule } from './idn/idn.module';
       username: 'username',
       password: 'password',
       database: 'starvault',
-      entities: [],
+      autoLoadEntities: true,
     }),
     IdnModule,
   ],
