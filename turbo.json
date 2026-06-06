@@ -8,6 +8,19 @@
     "build": {
       "dependsOn": ["^build"],
       "outputs": ["dist/**"]
+    },
+    "migration:generate": {
+      "dependsOn": ["build"],
+      "cache": false
+    },
+    "migration:run": {
+      "cache": false
+    },
+    "migration:revert": {
+      "cache": false
+    },
+    "migration:show": {
+      "cache": false
     }
   }
 }
