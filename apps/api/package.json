@@ -20,7 +20,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "typeorm": "typeorm-ts-node-esm -d src/database/data-source.ts",
     "migration:generate": "pnpm run build && pnpm run typeorm migration:generate src/database/migrations/Migration",
-    "migration:run": "pnpm run typeorm migration:run",
+    "migration:run": "pnpm run build && pnpm run typeorm migration:run",
     "migration:revert": "pnpm run typeorm migration:revert",
     "migration:show": "pnpm run typeorm migration:show"
   },
