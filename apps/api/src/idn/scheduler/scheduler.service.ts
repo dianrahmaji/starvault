@@ -10,7 +10,7 @@ type Creator = {
   username: string;
 };
 
-enum LivestreamStatus {
+enum LiveStreamStatus {
   Live = 'live',
   Scheduled = 'scheduled',
 }
@@ -19,7 +19,7 @@ type LiveStream = {
   title: string;
   image_url: string;
   playback_url: string;
-  status: LivestreamStatus;
+  status: LiveStreamStatus;
   creator: Creator;
 };
 
@@ -55,19 +55,19 @@ export class SchedulerService {
 
   @Cron(CronExpression.EVERY_MINUTE)
   async getLiveStreams() {
-    const livestreams = await this.fetchLivestreams();
+    const liveStreams = await this.fetchLiveStreams();
 
-    const activeExternalIds = livestreams
-      .filter((livestream) => {
-        return livestream.status === LivestreamStatus.Live;
+    const activeExternalIds = liveStreams
+      .filter((liveStream) => {
+        return liveStream.status === LiveStreamStatus.Live;
       })
-      .map((livesteram) => {
-        return livesteram.creator.uuid;
+      .map((liveStream) => {
+        return liveStream.creator.uuid;
       });
 
     const activeExternalIdSet = new Set(activeExternalIds);
 
-    const creatorEntries = livestreams.map(({ creator: { uuid, ...rest } }) => {
+    const creatorEntries = liveStreams.map(({ creator: { uuid, ...rest } }) => {
       const isLivestreaming = activeExternalIdSet.has(uuid);
 
       return [uuid, { externalId: uuid, isLivestreaming, ...rest }] as const;
@@ -82,7 +82,7 @@ export class SchedulerService {
     await this.creatorService.resetLivestreamingStatus(activeExternalIds);
   }
 
-  private async fetchLivestreams() {
+  private async fetchLiveStreams() {
     const allLiveStreams: LiveStream[] = [];
 
     for (let page = 1; ; page++) {
