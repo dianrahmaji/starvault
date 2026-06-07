@@ -55,6 +55,34 @@ export class SchedulerService {
 
   @Cron(CronExpression.EVERY_MINUTE)
   async getLiveStreams() {
+    const livestreams = await this.fetchLivestreams();
+
+    const activeExternalIds = livestreams
+      .filter((livestream) => {
+        return livestream.status === LivestreamStatus.Live;
+      })
+      .map((livesteram) => {
+        return livesteram.creator.uuid;
+      });
+
+    const activeExternalIdSet = new Set(activeExternalIds);
+
+    const creatorEntries = livestreams.map(({ creator: { uuid, ...rest } }) => {
+      const isLivestreaming = activeExternalIdSet.has(uuid);
+
+      return [uuid, { externalId: uuid, isLivestreaming, ...rest }] as const;
+    });
+
+    const creatorsMap = new Map(creatorEntries);
+
+    const creators = [...creatorsMap.values()];
+
+    await this.creatorService.upsertMany(creators);
+
+    await this.creatorService.resetLivestreamingStatus(activeExternalIds);
+  }
+
+  private async fetchLivestreams() {
     const allLiveStreams: LiveStream[] = [];
 
     for (let page = 1; ; page++) {
@@ -76,30 +104,6 @@ export class SchedulerService {
       allLiveStreams.push(...liveStreams);
     }
 
-    const activeExternalIds = allLiveStreams
-      .filter((livestream) => {
-        return livestream.status === LivestreamStatus.Live;
-      })
-      .map((livesteram) => {
-        return livesteram.creator.uuid;
-      });
-
-    const activeExternalIdSet = new Set(activeExternalIds);
-
-    const creatorEntries = allLiveStreams.map(
-      ({ creator: { uuid, ...rest } }) => {
-        const isLivestreaming = activeExternalIdSet.has(uuid);
-
-        return [uuid, { externalId: uuid, isLivestreaming, ...rest }] as const;
-      },
-    );
-
-    const creatorsMap = new Map(creatorEntries);
-
-    const creators = [...creatorsMap.values()];
-
-    await this.creatorService.upsertMany(creators);
-
-    await this.creatorService.resetLivestreamingStatus(activeExternalIds);
+    return allLiveStreams;
   }
 }
