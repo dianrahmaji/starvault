@@ -10,11 +10,16 @@ type Creator = {
   username: string;
 };
 
+enum LivestreamStatus {
+  Live = 'live',
+  Scheduled = 'scheduled',
+}
+
 type LiveStream = {
   title: string;
   image_url: string;
   playback_url: string;
-  status: string;
+  status: LivestreamStatus;
   creator: Creator;
 };
 
@@ -71,9 +76,21 @@ export class SchedulerService {
       allLiveStreams.push(...liveStreams);
     }
 
+    const activeExternalIds = allLiveStreams
+      .filter((livestream) => {
+        return livestream.status === LivestreamStatus.Live;
+      })
+      .map((livesteram) => {
+        return livesteram.creator.uuid;
+      });
+
+    const activeExternalIdSet = new Set(activeExternalIds);
+
     const creatorEntries = allLiveStreams.map(
       ({ creator: { uuid, ...rest } }) => {
-        return [uuid, { externalId: uuid, ...rest }] as const;
+        const isLivestreaming = activeExternalIdSet.has(uuid);
+
+        return [uuid, { externalId: uuid, isLivestreaming, ...rest }] as const;
       },
     );
 
@@ -82,5 +99,7 @@ export class SchedulerService {
     const creators = [...creatorsMap.values()];
 
     await this.creatorService.upsertMany(creators);
+
+    await this.creatorService.resetLivestreamingStatus(activeExternalIds);
   }
 }

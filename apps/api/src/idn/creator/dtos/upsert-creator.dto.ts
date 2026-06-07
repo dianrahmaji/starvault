@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsBoolean, IsNotEmpty, IsString } from 'class-validator';
 
 export class UpsertCreatorDto {
   @IsNotEmpty()
@@ -12,4 +12,8 @@ export class UpsertCreatorDto {
   @IsNotEmpty()
   @IsString()
   readonly username: string;
+
+  @IsNotEmpty()
+  @IsBoolean()
+  readonly isLivestreaming: boolean;
 }

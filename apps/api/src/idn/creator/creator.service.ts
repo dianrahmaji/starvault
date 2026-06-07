@@ -23,4 +23,21 @@ export class CreatorService {
       },
     });
   }
+
+  async resetLivestreamingStatus(activeExternalIds: string[]) {
+    if (!activeExternalIds.length) {
+      return;
+    }
+
+    await this.creatorRepository
+      .createQueryBuilder()
+      .update(Creator)
+      .set({
+        isLivestreaming: false,
+      })
+      .where('isLivestreaming = true AND "externalId" NOT IN (:...ids)', {
+        ids: activeExternalIds,
+      })
+      .execute();
+  }
 }
