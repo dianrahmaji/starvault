@@ -18,4 +18,16 @@ export class Creator {
   @Field()
   @Column()
   name: string;
+
+  @Field()
+  @Column({ default: false })
+  isLivestreaming: boolean;
+
+  @Field()
+  @Column({ default: false })
+  isRecording: boolean;
+
+  @Field()
+  @Column({ default: false })
+  isRecordingEnabled: boolean;
 }
