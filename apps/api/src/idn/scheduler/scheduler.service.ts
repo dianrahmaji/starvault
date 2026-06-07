@@ -2,6 +2,7 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { firstValueFrom } from 'rxjs';
+import { CreatorService } from '../creator/creator.service';
 
 type Creator = {
   name: string;
@@ -42,9 +43,12 @@ const GET_LIVESTREAMS_QUERY = `
 
 @Injectable()
 export class SchedulerService {
-  constructor(private readonly httpService: HttpService) {}
+  constructor(
+    private readonly httpService: HttpService,
+    private readonly creatorService: CreatorService,
+  ) {}
 
-  @Cron(CronExpression.EVERY_10_SECONDS)
+  @Cron(CronExpression.EVERY_MINUTE)
   async getLiveStreams() {
     const allLiveStreams: LiveStream[] = [];
 
@@ -66,5 +70,17 @@ export class SchedulerService {
 
       allLiveStreams.push(...liveStreams);
     }
+
+    const creatorEntries = allLiveStreams.map(
+      ({ creator: { uuid, ...rest } }) => {
+        return [uuid, { externalId: uuid, ...rest }] as const;
+      },
+    );
+
+    const creatorsMap = new Map(creatorEntries);
+
+    const creators = [...creatorsMap.values()];
+
+    await this.creatorService.upsertMany(creators);
   }
 }

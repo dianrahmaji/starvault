@@ -6,5 +6,6 @@ import { CreatorService } from './creator.service';
 @Module({
   imports: [TypeOrmModule.forFeature([Creator])],
   providers: [CreatorService],
+  exports: [CreatorService],
 })
 export class CreatorModule {}
