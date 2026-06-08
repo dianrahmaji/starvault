@@ -1,4 +1,6 @@
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
+import { FastifyAdapter } from '@bull-board/fastify';
+import { BullBoardModule } from '@bull-board/nestjs';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { BullModule } from '@nestjs/bullmq';
 import { Module } from '@nestjs/common';
@@ -21,6 +23,10 @@ import { IdnModule } from './idn/idn.module';
           port: configService.getOrThrow<number>('REDIS_PORT'),
         },
       }),
+    }),
+    BullBoardModule.forRoot({
+      adapter: FastifyAdapter,
+      route: '/queues',
     }),
     ConfigModule.forRoot({ isGlobal: true }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
