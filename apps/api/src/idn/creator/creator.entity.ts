@@ -1,5 +1,6 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Stream } from '../stream/stream.entity';
 
 @ObjectType()
 @Entity()
@@ -30,4 +31,7 @@ export class Creator {
   @Field()
   @Column({ default: false })
   isRecordingEnabled: boolean;
+
+  @OneToMany(() => Stream, (stream) => stream.creator)
+  streams: Stream[];
 }
