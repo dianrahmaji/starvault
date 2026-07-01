@@ -13,6 +13,7 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { dataSourceOptions } from './database/data-source';
 import { IdnModule } from './idn/idn.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { IdnModule } from './idn/idn.module';
     TypeOrmModule.forRoot({ ...dataSourceOptions, autoLoadEntities: true }),
     IdnModule,
     AuthModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],
