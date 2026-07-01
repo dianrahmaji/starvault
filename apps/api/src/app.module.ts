@@ -10,6 +10,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { AuthModule } from './auth/auth.module';
 import { dataSourceOptions } from './database/data-source';
 import { IdnModule } from './idn/idn.module';
 
@@ -38,6 +39,7 @@ import { IdnModule } from './idn/idn.module';
     ScheduleModule.forRoot(),
     TypeOrmModule.forRoot({ ...dataSourceOptions, autoLoadEntities: true }),
     IdnModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
