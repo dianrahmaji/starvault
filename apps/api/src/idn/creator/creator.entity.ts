@@ -1,13 +1,21 @@
-import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Field, ObjectType } from '@nestjs/graphql';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  OneToMany,
+  PrimaryColumn,
+  UpdateDateColumn,
+} from 'typeorm';
+import { v7 } from 'uuid';
 import { Stream } from '../stream/stream.entity';
 
 @ObjectType()
 @Entity()
 export class Creator {
-  @Field(() => Int)
-  @PrimaryGeneratedColumn()
-  id: number;
+  @Field()
+  @PrimaryColumn({ type: 'uuid' })
+  id: string = v7();
 
   @Column({ unique: true })
   externalId: string;
@@ -31,6 +39,12 @@ export class Creator {
   @Field()
   @Column({ default: false })
   isRecordingEnabled: boolean;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 
   @OneToMany(() => Stream, (stream) => stream.creator)
   streams: Stream[];
