@@ -4,13 +4,15 @@ import {
   Entity,
   ManyToOne,
   PrimaryColumn,
+  UpdateDateColumn,
 } from 'typeorm';
+import { v7 } from 'uuid';
 import { Creator } from '../creator/creator.entity';
 
 @Entity()
 export class Stream {
-  @PrimaryColumn()
-  id: number;
+  @PrimaryColumn({ type: 'uuid' })
+  id: string = v7();
 
   @Column()
   title: string;
@@ -21,11 +23,17 @@ export class Stream {
   @Column({ nullable: true })
   thumbnailUrl?: string;
 
-  @CreateDateColumn({ type: 'timestamptz' })
+  @Column({ type: 'timestamptz' })
   startedAt: Date;
 
   @Column({ type: 'timestamptz', nullable: true })
   endedAt?: Date;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 
   @ManyToOne(() => Creator, (creator) => creator.streams)
   creator: Creator;
