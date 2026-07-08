@@ -14,5 +14,9 @@ const services: Provider[] = [
     //
     ...services,
   ],
+  exports: [
+    //
+    UserService,
+  ],
 })
 export class UserModule {}
