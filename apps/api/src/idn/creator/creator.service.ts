@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { v7 } from 'uuid';
 import { Creator } from './creator.entity';
 import { UpsertCreatorDto } from './dtos/upsert-creator.dto';
 
@@ -16,12 +17,15 @@ export class CreatorService {
   }
 
   async upsertMany(creators: UpsertCreatorDto[]) {
-    await this.creatorRepository.upsert(creators, {
-      skipUpdateIfNoValuesChanged: true,
-      conflictPaths: {
-        externalId: true,
+    await this.creatorRepository.upsert(
+      creators.map((creator) => ({ id: v7(), ...creator })),
+      {
+        skipUpdateIfNoValuesChanged: true,
+        conflictPaths: {
+          externalId: true,
+        },
       },
-    });
+    );
   }
 
   async resetLivestreamingStatus(activeExternalIds: string[]) {

@@ -1,4 +1,4 @@
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, ID, ObjectType } from '@nestjs/graphql';
 import {
   Column,
   CreateDateColumn,
@@ -13,7 +13,7 @@ import { Stream } from '../stream/stream.entity';
 @ObjectType()
 @Entity()
 export class Creator {
-  @Field()
+  @Field(() => ID)
   @PrimaryColumn({ type: 'uuid' })
   id: string = v7();
 
