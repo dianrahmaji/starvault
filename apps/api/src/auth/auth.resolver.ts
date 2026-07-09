@@ -17,6 +17,21 @@ class SignInInput {
   password: string;
 }
 
+@InputType()
+class SignUpInput {
+  @Field()
+  username: string;
+
+  @Field()
+  password: string;
+
+  @Field()
+  firstName: string;
+
+  @Field()
+  lastName: string;
+}
+
 @ObjectType()
 class AuthToken {
   @Field()
@@ -30,5 +45,10 @@ export class AuthResolver {
   @Mutation(() => AuthToken)
   signIn(@Args('signInInput') signInInput: SignInInput) {
     return this.authService.signIn(signInInput);
+  }
+
+  @Mutation(() => AuthToken)
+  signUp(@Args('signUpInput') signUpInput: SignUpInput) {
+    return this.authService.signUp(signUpInput);
   }
 }
